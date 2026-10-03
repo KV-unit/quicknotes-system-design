@@ -3,6 +3,10 @@ const API_URL = 'https://jsonplaceholder.typicode.com/posts';
 const loadBtn = document.getElementById('load-btn');
 const statusEl = document.getElementById('status');
 const notesList = document.getElementById('notes-list');
+const noteForm = document.getElementById('note-form');
+const titleInput = document.getElementById('title-input');
+const bodyInput = document.getElementById('body-input');
+const submitBtn = document.getElementById('submit-btn');
 
 let notes = [];
 
@@ -71,4 +75,55 @@ async function loadNotes() {
     }
 }
 
+function validateTitle(title) {
+    if (!title) {
+        return 'A title is required.';
+    }
+    if (title.length > 100) {
+        return 'Title must be 100 characters or fewer.';
+    }
+    return null;
+}
+
+async function createNote(title, body) {
+    submitBtn.disabled = true;
+    setStatus('Saving note...', 'loading');
+
+    try {
+        const newNote = await request(API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ title, body, userId: 1 })
+        });
+
+        // JSONPlaceholder fakes the create: it returns a realistic new id
+        // (e.g. 101) but does not actually persist the note server-side.
+        // We treat its response as the source of truth for what gets added
+        // to our local list, the same way a client would trust a real API.
+        notes = [newNote, ...notes];
+        renderNotes();
+        setStatus(`Note created (status 201, id ${newNote.id}).`, 'success');
+        noteForm.reset();
+    } catch (error) {
+        setStatus(`Error: ${error.message}`, 'error');
+    } finally {
+        submitBtn.disabled = false;
+    }
+}
+
 loadBtn.addEventListener('click', loadNotes);
+
+noteForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const title = titleInput.value.trim();
+    const body = bodyInput.value.trim();
+    const validationError = validateTitle(title);
+
+    if (validationError) {
+        setStatus(validationError, 'error');
+        return;
+    }
+
+    createNote(title, body);
+});
