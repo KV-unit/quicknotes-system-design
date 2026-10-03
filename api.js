@@ -53,8 +53,15 @@ function renderNotes() {
         const bodyEl = document.createElement('p');
         bodyEl.textContent = note.body;
 
+        const deleteBtn = document.createElement('button');
+        deleteBtn.type = 'button';
+        deleteBtn.className = 'delete-btn';
+        deleteBtn.textContent = 'Delete';
+        deleteBtn.addEventListener('click', () => deleteNote(note.id, li, deleteBtn));
+
         li.appendChild(titleEl);
         li.appendChild(bodyEl);
+        li.appendChild(deleteBtn);
         notesList.appendChild(li);
     });
 }
@@ -108,6 +115,30 @@ async function createNote(title, body) {
         setStatus(`Error: ${error.message}`, 'error');
     } finally {
         submitBtn.disabled = false;
+    }
+}
+
+async function deleteNote(id, listItem, deleteBtn) {
+    deleteBtn.disabled = true;
+    setStatus('Deleting note...', 'loading');
+
+    try {
+        await request(`${API_URL}/${id}`, { method: 'DELETE' });
+
+        // JSONPlaceholder doesn't really delete anything server-side either;
+        // a successful response here just simulates what a real API would
+        // confirm. We treat that confirmation as the signal to remove the
+        // note from our local state and the DOM.
+        notes = notes.filter(note => note.id !== id);
+        listItem.remove();
+        setStatus('Note deleted.', 'success');
+
+        if (notes.length === 0) {
+            renderNotes();
+        }
+    } catch (error) {
+        setStatus(`Error: ${error.message}`, 'error');
+        deleteBtn.disabled = false;
     }
 }
 
