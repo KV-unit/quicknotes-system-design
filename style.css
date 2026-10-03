@@ -1,0 +1,116 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: system-ui, -apple-system, sans-serif;
+    max-width: 640px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    color: #1a1a1a;
+    line-height: 1.5;
+}
+
+.container h1 {
+    margin-bottom: 0.25rem;
+}
+
+.subtitle {
+    color: #555;
+    margin-top: 0;
+}
+
+section {
+    margin-bottom: 2rem;
+}
+
+button {
+    background: #2563eb;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+button:disabled {
+    background: #94a3b8;
+    cursor: not-allowed;
+}
+
+#status {
+    min-height: 1.2em;
+    margin-top: 0.5rem;
+    font-weight: 600;
+}
+
+.status-loading {
+    color: #555;
+}
+
+.status-success {
+    color: #15803d;
+}
+
+.status-error {
+    color: #b91c1c;
+}
+
+.field {
+    margin-bottom: 1rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+}
+
+input[type="text"],
+textarea {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 1rem;
+}
+
+textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+#notes-list {
+    list-style: none;
+    padding: 0;
+}
+
+.note-item {
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.note-item h3 {
+    margin: 0 0 0.25rem;
+}
+
+.note-item p {
+    margin: 0 0 0.5rem;
+    color: #333;
+}
+
+.delete-btn {
+    background: #dc2626;
+    font-size: 0.875rem;
+    padding: 0.25rem 0.75rem;
+}
+
+.empty-state {
+    color: #777;
+    font-style: italic;
+    list-style: none;
+}
